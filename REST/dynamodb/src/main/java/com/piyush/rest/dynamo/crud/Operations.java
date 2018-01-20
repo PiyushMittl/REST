@@ -58,7 +58,7 @@ public class Operations {
 		Table table = dynamoDB.getTable(tableName);
 		try {
 
-			Item item = new Item().withPrimaryKey("id", "" + new Random().nextInt(99) + 1)
+			Item item = new Item().withPrimaryKey("Id",new Random().nextInt(99) + 1)
 					.withString("name", "" + data.get("name")).withString("age", "" + data.get("age"));
 			table.putItem(item);
 
