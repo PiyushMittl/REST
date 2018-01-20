@@ -35,7 +35,7 @@ public class Save implements RequestStreamHandler{
 		}
 
 		Operations op=new Operations();
-		op.save("student", payloadObject);
+		op.save("student", payloadData);
 		
 		String request = iStream.toString();
 		System.out.println(request);
