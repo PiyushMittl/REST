@@ -15,6 +15,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.DeleteItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.PrimaryKey;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.UpdateItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
@@ -29,19 +30,21 @@ public class Operations {
 	// AmazonDynamoDBClientBuilder.standard().build();
 
 	static AmazonDynamoDBClient client = new AmazonDynamoDBClient(
-			new BasicAWSCredentials("AKIAISESGM7H2NNJV3VQ", "plL3zBRUS6yuoS8n1reZplhFS7PxYEKPm1O9I60q"))
+			new BasicAWSCredentials("piyushAKIAJUDOQ7VAFE4J3RAA", "piyushW+OgfbueLxuAij/2/GV8HTfxWEZexOd0pi0CI6z1"))
 					.withRegion(Regions.US_EAST_1);
 
 	static DynamoDB dynamoDB = new DynamoDB(client);
 
-	//static String tableName = "ProductCatalog";
+	// static String tableName = "ProductCatalog";
 	static String tableName = "student";
 
 	public static void main(String[] args) throws IOException {
 
 		// createItems();
-//get("student",711);
-		retrieveItem();
+		// get("student",711);
+		 update("student",1);
+		
+		//retrieveItem();
 
 		// Perform various updates.
 		// updateMultipleAttributes();
@@ -53,12 +56,12 @@ public class Operations {
 
 	}
 
-	public void save(String tableName, Map<String, Object> data) {
+	public void save(String tableName, Map<String, String> data) {
 
 		Table table = dynamoDB.getTable(tableName);
 		try {
 
-			Item item = new Item().withPrimaryKey("Id",new Random().nextInt(99) + 1)
+			Item item = new Item().withPrimaryKey("Id", new Random().nextInt(99) + 1)
 					.withString("name", "" + data.get("name")).withString("age", "" + data.get("age"));
 			table.putItem(item);
 
@@ -74,11 +77,40 @@ public class Operations {
 
 		try {
 
-			 Item item = table.getItem("Id", 120, "Id, ISBN, Title, Authors, Price",null);
 
-		//	Item item = table.getItem("id", primarKey);
+			Item item = table.getItem("Id", primarKey);
 
 			System.out.println("Printing item after retrieving it....");
+			System.out.println(item.toJSONPretty());
+			return item.toJSONPretty();
+
+		} catch (Exception e) {
+			System.err.println("GetItem failed.");
+			System.err.println(e.getMessage());
+		}
+		return "item not available";
+	}
+
+	public static String update(String tableName, int primaryKey) {
+		Table table = dynamoDB.getTable(tableName);
+
+		try {
+
+			UpdateItemSpec updateItemSpec = new UpdateItemSpec().withPrimaryKey("Id", primaryKey)
+					.withUpdateExpression("set age = :r")
+					.withValueMap(new ValueMap().withString(":r", "sameer"));
+			
+			
+			try {
+	            table.updateItem(updateItemSpec);
+	            System.out.println("Updating the item...");
+	            System.out.println("Printing item after retrieving it....");
+	        } catch (Exception e) {
+	            System.out.println("UpdateItem failed");
+	            e.printStackTrace();
+	        }
+
+			Item item = table.getItem("Id", primaryKey);
 			System.out.println(item.toJSONPretty());
 			return item.toJSONPretty();
 
