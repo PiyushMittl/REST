@@ -36,9 +36,8 @@ public class Get implements RequestStreamHandler{
 		Operations op=new Operations();
 		String data=op.get("student", Integer.parseInt(payloadData.get("Id")));
 		
-		String request = iStream.toString();
-		System.out.println(request);
-		oStream.write(new ObjectMapper().writeValueAsString(data).toString().getBytes());
+		//oStream.write(new ObjectMapper().writeValueAsString(data).toString().getBytes());
+		oStream.write(data.getBytes());
 	}
 }
 
