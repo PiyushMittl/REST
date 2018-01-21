@@ -26,7 +26,7 @@ import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 
 public class Operations {
 
-	//
+	///
 	// static AmazonDynamoDB client =
 	// AmazonDynamoDBClientBuilder.standard().build();
 
